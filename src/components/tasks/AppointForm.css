@@ -1,0 +1,36 @@
+/* AppointForm.css */
+
+/* Set the background color to dark grey */
+body {
+  background-color: #333;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  text-align: center;
+}
+
+/* Style the submit button with a pink background and white text */
+button[type="submit"] {
+  background-color: #ff69b4;
+  color: white;
+  padding: 10px 20px;
+  font-size: 24px;
+  margin-top: 20px;
+}
+
+/* Set text color to white for all elements within the form */
+form, h2, input, textarea, a {
+  color: white;
+  font-size: 24px;
+}
+
+/* Style the h2 tags to be 4 times bigger */
+h2 {
+  font-size: 96px;
+}
+
+/* Style the text to be 4 times bigger */
+p {
+  font-size: 96px;
+}

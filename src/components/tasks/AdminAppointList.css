@@ -1,0 +1,64 @@
+/* AppointList.css */
+
+/* Set the background color to dark grey */
+body {
+    background-color: #333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    text-align: center;
+  }
+  
+  /* Style the headings to be 4 times bigger */
+  h2 {
+    font-size: 96px;
+    color: white;
+    margin: 20px 0;
+  }
+  
+  /* Style the appoint items */
+  li {
+    list-style: none;
+    background-color: #555;
+    color: white;
+    margin: 10px 0;
+    padding: 10px;
+    border-radius: 5px;
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  /* Style the buttons with pink background and white text */
+  button {
+    background-color: #ff69b4;
+    color: white;
+    padding: 10px 20px;
+    margin: 5px;
+    font-size: 24px;
+  }
+  
+  /* Style the text in appoint items to be 4 times bigger */
+  div {
+    font-size: 24px;
+  }
+  
+  /* Style the text in edit mode to be 4 times bigger */
+  input, textarea {
+    font-size: 24px;
+    background-color: #333232; /* Grey background when in edit mode */
+  }
+
+
+
+  /* Add this CSS class to make the appointment background light green */
+.accepted {
+  background-color: lightgreen;
+}
+
+/* Add this CSS class to style the "Unaccept" button */
+.unaccept-button {
+  background-color: lightcoral; /* Set your preferred color for the "Unaccept" button */
+  color: white; /* Text color */
+}
+  
