@@ -1,7 +1,7 @@
 const Appoint = require('../models/Appoint'); // Import the Appoint model
 
 // Controller function to get all appointments
-const list = async (req, res) => {
+  exports.list = async (req, res) => {
   try {
     // Fetch all appointments from the database
     const appoints = await Appoint.find();
@@ -79,7 +79,7 @@ const remove = async (req, res) => {
 
 // Export the controller functions for use in the application
 module.exports = {
-  list,
+  
   create,
   update,
   remove,
