@@ -17,6 +17,7 @@ const AppointList = () => {
     const fetchAppoints = async () => {
       try {
         const response = await axios.get('/api/tasks/list');
+        console.log(response , "This is the url");
         setAppoints(response.data);
       } catch (err) {
         console.error('Error fetching Appointments:', err.message);
