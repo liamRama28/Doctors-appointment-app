@@ -6,10 +6,6 @@ const router = express.Router(); // Create an instance of an Express router
 router.get('/list', appointController.list);
 
 
-router.get('/', async (req, res) => {
-  
-    return res.json({message : 'Hello' });
-} );
 
 
 // Route to create a new appointment

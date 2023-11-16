@@ -17,7 +17,6 @@ app.use('/api/users', userRoutes);
 
 // Define routes
 app.use('/api/tasks', appointRoutes); // Use the appoint routes for /api/appoints
-app.use('/test', appointRoutes); // Use the appoint routes for /api/appoints
 
 
 app.listen(PORT, () => {

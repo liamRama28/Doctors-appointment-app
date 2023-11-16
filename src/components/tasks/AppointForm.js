@@ -34,6 +34,7 @@ const AppointForm = () => {
       // Make a POST request to create a new appointment
       const response = await axios.post('/api/tasks/create', appoint);
 
+
       console.log('Appointment created:', response.data);
 
       // Clear form fields

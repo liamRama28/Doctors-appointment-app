@@ -1,7 +1,7 @@
 const Appoint = require('../models/Appoint'); // Import the Appoint model
 
 // Controller function to get all appointments
-  exports.list = async (req, res) => {
+const list = async (req, res) => {
   try {
     // Fetch all appointments from the database
     const appoints = await Appoint.find();
@@ -20,6 +20,7 @@ const Appoint = require('../models/Appoint'); // Import the Appoint model
     res.status(500).json({ error: 'An error occurred while fetching appointments' });
   }
 };
+
 
 // Controller function to create a new appointment
 const create = async (req, res) => {
@@ -41,6 +42,8 @@ const create = async (req, res) => {
     res.status(500).json({ error: 'An error occurred while creating the appointment' });
   }
 };
+
+
 
 // Controller function to update an appointment by ID
 const update = async (req, res) => {
@@ -79,7 +82,7 @@ const remove = async (req, res) => {
 
 // Export the controller functions for use in the application
 module.exports = {
-  
+  list,
   create,
   update,
   remove,
