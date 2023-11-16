@@ -16,8 +16,8 @@ const AppointList = () => {
   useEffect(() => {
     const fetchAppoints = async () => {
       try {
-        const response = await axios.get('https://doctors-appointment-app-jkgz.onrender.com/api/tasks/list');
-        console.log(response , "This is the url");
+        const response = await axios.get('/api/tasks/list');
+    
         setAppoints(response.data);
       } catch (err) {
         console.error('Error fetching Appointments:', err.message);
