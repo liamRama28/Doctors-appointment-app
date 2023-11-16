@@ -1,3 +1,4 @@
+// src/routes/appointRoutes.js
 const express = require('express'); // Import the Express framework
 const appointController = require('../controllers/appointController'); // Import the controller for appointments
 const router = express.Router(); // Create an instance of an Express router
@@ -19,3 +20,4 @@ router.put('/edit/:id', appointController.update);
 
 // Export the router to be used in other parts of the application
 module.exports = router;
+

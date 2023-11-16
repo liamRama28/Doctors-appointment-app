@@ -1,4 +1,6 @@
+//src/controllers/appointController.js
 const Appoint = require('../models/Appoint'); // Import the Appoint model
+
 
 // Controller function to get all appointments
 const list = async (req, res) => {
@@ -33,10 +35,14 @@ const create = async (req, res) => {
       return res.status(400).json({ error: 'Appointment text cannot exceed 140 characters' });
     }
 
+      
+
     // Create a new Appoint instance with the provided data
-    const appoint = new Appoint({ title, description, doctor, date, timeSlot });
+    const appoint = new Appoint({ title, description, doctor, date, timeSlot});
     const savedAppoint = await appoint.save(); // Save the newly created appointment
-    res.status(201).json(savedAppoint); // Return the created appointment
+    
+    // Send a success message along with the created appointment
+    res.status(201).json({ message: 'Your appointment was added', appointment: savedAppoint });
   } catch (error) {
     console.error('Error creating appointment:', error);
     res.status(500).json({ error: 'An error occurred while creating the appointment' });

@@ -34,7 +34,7 @@ const Register = () => {
       // Handle successful registration
       console.log('Registration successful:', response.data);
       // You can show a success message or redirect the user
-      navigate('/login'); // Use navigate to redirect
+      navigate('/tasks'); // Use navigate to redirect
     } catch (err) {
       if (err.response) {
         // Handle server-side errors (e.g., 400 Bad Request)

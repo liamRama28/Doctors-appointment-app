@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from '../../api'; // Import Axios with your configured base URL
-import { Link } from 'react-router-dom'; // Updated import
+import { Link, useNavigate } from 'react-router-dom';  // <-- Add this line
 import './AdminAppointList.css'; // Import the CSS file for styling
 
 const AppointList = () => {
@@ -88,6 +88,8 @@ const AppointList = () => {
   // Check if an appointment is accepted
   const isAppointAccepted = (appointId) => acceptedAppoints.has(appointId);
 
+  const navigate = useNavigate(); // Add this line to get the navigate function
+
   return (
     <div>
       <h2>Appointment List</h2>
@@ -135,7 +137,7 @@ const AppointList = () => {
       </ul>
 
       <div>
-        <Link to="/login">Log Out</Link> {/* Use Link to navigate to the login page */}
+      <button onClick={() => navigate('/login')}>Log Out</button>
       </div>
     </div>
   );

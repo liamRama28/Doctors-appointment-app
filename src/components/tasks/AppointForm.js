@@ -1,3 +1,5 @@
+//AppointForm.js
+
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import axios from '../../api';
@@ -13,6 +15,7 @@ const AppointForm = () => {
     time: '',
   });
   const [error, setError] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
 
   const { title, description, doctor, date, time } = appoint;
 
@@ -21,28 +24,32 @@ const AppointForm = () => {
     setAppoint({ ...appoint, [e.target.name]: e.target.value });
   };
 
-  // Handle form submission
+ // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      // Check if the total character count of title and description exceeds 140
       if (appoint.title.length + appoint.description.length > 140) {
         setError('Text cannot exceed 140 characters');
         return;
       }
 
-      // Make a POST request to create a new appointment
       const response = await axios.post('/api/tasks/create', appoint);
 
-
-      console.log('Appointment created:', response.data);
+      // Check for success message in the response
+      if (response.data && response.data.message) {
+        setSuccessMessage(response.data.message);
+      }
 
       // Clear form fields
       setAppoint({ title: '', description: '', doctor: '', date: '', time: '' });
     } catch (err) {
       console.error('Error creating appointment:', err.message);
+      setError('An error occurred while creating the appointment');
     }
   };
+
+  
+  
 
   return (
     <div>
@@ -102,6 +109,7 @@ const AppointForm = () => {
         <button type="submit">Create Appointment</button>
       </form>
       {error && <div className="error-message">{error}</div>}
+      {successMessage && <div className="success-message">{successMessage}</div>}
       <Link to="/tasks" className="back-button">
         Back to Appointment List
       </Link>

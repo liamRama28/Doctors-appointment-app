@@ -1,3 +1,4 @@
+//src/controllers/userController.js
 const User = require('../models/User'); // Import the User model
 const jwt = require('jsonwebtoken'); // Import JSON Web Token library
 const bcrypt = require('bcrypt'); // Import bcrypt library for password hashing
@@ -57,4 +58,3 @@ exports.login = async (req, res) => {
     res.status(500).json({ error: 'Login failed' });
   }
 };
-

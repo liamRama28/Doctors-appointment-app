@@ -20,7 +20,7 @@ button[type="submit"] {
 }
 
 /* Set text color to white for all elements within the form */
-form, h2, input, textarea, a {
+form, h2, input, textarea, a, .error-message, .success-message {
   color: white;
   font-size: 24px;
 }
@@ -34,3 +34,14 @@ h2 {
 p {
   font-size: 96px;
 }
+
+/* Style for error messages */
+.error-message {
+  color: #ff0000; /* Set error message color to red */
+}
+
+/* Style for success messages */
+.success-message {
+  color: #00ff00; /* Set success message color to green */
+}
+

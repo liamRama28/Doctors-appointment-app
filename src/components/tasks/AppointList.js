@@ -1,7 +1,11 @@
+//AppointList.js
+
 import React, { useEffect, useState } from 'react';
 import axios from '../../api'; // Import Axios with your configured base URL
-import { Link } from 'react-router-dom'; // Updated import
+import { Link, useNavigate } from 'react-router-dom';  // <-- Add this line
 import './AppointList.css'; // Import the CSS file for styling
+
+
 
 const AppointList = () => {
   // State variables
@@ -10,6 +14,7 @@ const AppointList = () => {
   const [editedTitle, setEditedTitle] = useState(''); // To edit appointment title
   const [editedDescription, setEditedDescription] = useState(''); // To edit appointment description
   const [characterLimitExceeded, setCharacterLimitExceeded] = useState(false); // To track character limit exceeded
+
 
   useEffect(() => {
     // Fetch appointments from the server on component mount
@@ -23,8 +28,15 @@ const AppointList = () => {
       }
     };
 
-    fetchAppoints();
+
+
+
+ fetchAppoints();
   }, []);
+
+
+  const navigate = useNavigate(); // Add this line to get the navigate function
+
 
   return (
     <div>
@@ -59,17 +71,16 @@ const AppointList = () => {
                 <div>{appoint.doctor}</div>
                 <div>{appoint.date}</div>
                 <div>{appoint.timeSlot}</div>
+                
               </div>
             )}
           </li>
         ))}
       </ul>
-      <Link to="/tasks/new">Create New Appointment</Link> {/* Link to the create appointment page */}
-      <Link to="/login">Log Out</Link> {/* Use Link to navigate to the login page */}
+      <button onClick={() => navigate('/tasks/new')}>Create New Appointment</button>
+<button onClick={() => navigate('/login')}>Log Out</button>
     </div>
   );
 };
 
 export default AppointList;
-
-
