@@ -24,7 +24,10 @@ const list = async (req, res) => {
 };
 
 
+
+
 // Controller function to create a new appointment
+
 const create = async (req, res) => {
   try {
     // Extract appointment data from the request body
@@ -35,10 +38,8 @@ const create = async (req, res) => {
       return res.status(400).json({ error: 'Appointment text cannot exceed 140 characters' });
     }
 
-      
-
     // Create a new Appoint instance with the provided data
-    const appoint = new Appoint({ title, description, doctor, date, timeSlot});
+    const appoint = new Appoint({ title, description, doctor, date, timeSlot });
     const savedAppoint = await appoint.save(); // Save the newly created appointment
     
     // Send a success message along with the created appointment
@@ -48,6 +49,7 @@ const create = async (req, res) => {
     res.status(500).json({ error: 'An error occurred while creating the appointment' });
   }
 };
+
 
 
 
@@ -89,6 +91,7 @@ const remove = async (req, res) => {
 // Export the controller functions for use in the application
 module.exports = {
   list,
+
   create,
   update,
   remove,

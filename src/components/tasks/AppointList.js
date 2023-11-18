@@ -16,23 +16,25 @@ const AppointList = () => {
   const [characterLimitExceeded, setCharacterLimitExceeded] = useState(false); // To track character limit exceeded
 
 
-  useEffect(() => {
-    // Fetch appointments from the server on component mount
-    const fetchAppoints = async () => {
-      try {
-        const response = await axios.get('/api/tasks/list');
-        
-        setAppoints(response.data);
-      } catch (err) {
-        console.error('Error fetching appointments:', err.message);
-      }
-    };
+ 
+ useEffect(() => {
+  // Fetch appointments from the server on component mount
+  const fetchAppoints = async () => {
+    try {
+      const response = await axios.get('/api/tasks/list');
+      
+      setAppoints(response.data);
+    } catch (err) {
+      console.error('Error fetching appointments:', err.message);
+    }
+  };
 
 
 
 
- fetchAppoints();
-  }, []);
+fetchAppoints();
+}, []);
+
 
 
   const navigate = useNavigate(); // Add this line to get the navigate function

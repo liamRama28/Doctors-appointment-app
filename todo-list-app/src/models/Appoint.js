@@ -8,7 +8,7 @@ const appointSchema = new mongoose.Schema({
   doctor: String, // Doctor associated with the appointment
   date: Date, // Date of the appointment
   timeSlot: String, // Time slot for the appointment
-
+  
  
 });
 
