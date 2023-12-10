@@ -1,7 +1,6 @@
 //src/controllers/appointController.js
 const Appoint = require('../models/Appoint'); // Import the Appoint model
 
-
 // Controller function to get all appointments
 const list = async (req, res) => {
   try {

@@ -1,3 +1,4 @@
+//AdminAppointmentList.js
 import React, { useEffect, useState } from 'react';
 import axios from '../../api'; // Import Axios with your configured base URL
 import { Link, useNavigate } from 'react-router-dom';  // <-- Add this line

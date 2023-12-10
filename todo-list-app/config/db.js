@@ -1,3 +1,4 @@
+//db.js
 const mongoose = require('mongoose');
 
 // Define the URI (Uniform Resource Identifier) for the MongoDB cluster

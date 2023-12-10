@@ -24,4 +24,3 @@ router.put('/edit/:id', appointController.update);
 
 // Export the router to be used in other parts of the application
 module.exports = router;
-

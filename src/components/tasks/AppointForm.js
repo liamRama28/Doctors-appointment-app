@@ -12,12 +12,12 @@ const AppointForm = () => {
     description: '',
     doctor: '',
     date: '',
-    time: '',
+    timeSlot: '',
   });
   const [error, setError] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
 
-  const { title, description, doctor, date, time } = appoint;
+  const { title, description, doctor, date, timeSlot } = appoint;
 
   // Handle changes in the form inputs
   const handleChange = (e) => {
@@ -43,7 +43,7 @@ const AppointForm = () => {
   setSuccessMessage(response.data.message);
 }
     // Clear form fields
-    setAppoint({ title: '', description: '', doctor: '', date: '', time: '' });
+    setAppoint({ title: '', description: '', doctor: '', date: '', timeSlot: '' });
   } catch (err) {
     console.error('Error creating appointment:', err.message);
   }
@@ -95,7 +95,7 @@ const AppointForm = () => {
           />
         </div>
         <div>
-          <select name="time" value={time} onChange={handleChange} required>
+          <select name="timeSlot" value={timeSlot} onChange={handleChange} required>
             <option value="">Select a Time</option>
             <option value="09:00">09:00</option>
             <option value="10:00">10:00</option>
