@@ -1,29 +1,43 @@
-How to Use the App:
+# Appointment Booking System
 
-1.Start by registering a new user using the /register route.
-2.Log in using the registered credentials through the /login route.
-3.Create new appointments using the "Create Appointment" button.
-4.View, edit, and delete appointments through the appointment list.
-5.Admin users can log in and view all appointments via the /admin/appoints route.
+## Overview
+This project is an appointment booking system designed for a medical clinic. It allows users to create appointments. Admin users can view and manage all appointments, while regular users can only manage their own.
+
+## Features
+- **User Authentication**: Users can register and log in to the system.
+- **Appointment Management**: Users can book and view their appointments.
+- **Admin Dashboard**: Admin users (`admin@gmail.com`) have access to all appointments and can manage them by editing, and deleting appointments.
+
+## Technologies Used
+- **Frontend**: React.js
+- **Backend**: Node.js with Express
+- **Database**: MongoDB
+- **Authentication**: JWT (JSON Web Tokens)
+
+## Getting Started
+
+### Prerequisites
+- Node.js
+- npm or yarn
+- MongoDB
+
+### Installation
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/liamRama28/Capstone-Project-II-part-2.git
+2. cd your-repository
+3. npm install
+
+### Running the Application
+Start the backend server: npm start
+Start the frontend server: npm start
 
 
-
-
-
-
-Instructions to Install, Test, and Run the App:
-
-git clone <repository-url>
-cd <repository-folder>
-npm install
-Ensure that you have MongoDB installed and running locally.
-Update the MongoDB URI in db.js with your connection details.
-npm start
-Open your web browser and go to http://localhost:3001 or the specified port.
-
-
-
-
+Usage
+Register: Sign up for a new account.
+Login: Log in with your credentials.
+Create Appointment: Book a new appointment by specifying the details.
+Edit/Delete Appointment: Manage your existing appointments.
 
 
 

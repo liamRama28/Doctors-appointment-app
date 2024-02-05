@@ -1,7 +1,7 @@
-//Login.js
+// Login.js
 
 import React, { useState } from 'react';
-import axios from '../../api';
+import axios from '../../api.mjs'; // Ensure this is your configured Axios instance
 import { Link, useNavigate } from 'react-router-dom';
 
 const Login = () => {
@@ -9,36 +9,39 @@ const Login = () => {
     email: '',
     password: '',
   });
+  const [error, setError] = useState(''); // State to handle any login error
 
   const { email, password } = formData;
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const navigate = useNavigate();
-
   const handleLogin = async (e) => {
     e.preventDefault();
+    setError(''); // Clear any previous errors
     try {
       const response = await axios.post('/api/users/login', formData);
 
-      console.log('Login successful:', response.data);
+      // Store user token, ID, and admin status in local storage
+      localStorage.setItem('auth-token', response.data.token);
+      localStorage.setItem('userId', response.data.userId);
+      localStorage.setItem('isAdmin', response.data.isAdmin);
 
-      if (email === 'admin@gmail.com') {
-        // If the user is an admin, redirect to the admin dashboard
-        navigate('/admin/appoints');
+      // Redirect based on user role
+      if (response.data.isAdmin) {
+        navigate('/admin/appoints'); // Redirect admin to the admin dashboard
       } else {
-        // For regular users, redirect to the user dashboard
-        navigate('/tasks');
+        navigate('/tasks'); // Redirect regular user to their dashboard
       }
     } catch (err) {
       if (err.response) {
-        console.error('Login failed:', err.response.data);
-      } else if (err.request) {
-        console.error('Network error:', err.request);
+        // Display error message from server
+        setError(err.response.data.error);
       } else {
-        console.error('Error:', err.message);
+        // Handle other errors like network issues
+        setError('Login failed. Please try again later.');
       }
     }
   };
@@ -67,6 +70,7 @@ const Login = () => {
             required
           />
         </div>
+        {error && <p style={{ color: 'red' }}>{error}</p>}
         <button type="submit">Login</button>
       </form>
       <Link to="/register">Don't have an account? Register</Link>

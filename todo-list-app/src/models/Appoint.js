@@ -1,21 +1,35 @@
 // src/models/Appoint.js
-const mongoose = require('mongoose'); // Import the Mongoose library
+const mongoose = require('mongoose');
 
-// Define a Mongoose schema for appointments
 const appointSchema = new mongoose.Schema({
-  title: String, // Title of the appointment
-  description: String, // Description of the appointment
-  doctor: String, // Doctor associated with the appointment
-  date: Date, // Date of the appointment
-  timeSlot: String, // Time slot for the appointment
- 
- 
+  title: {
+    type: String,
+    required: true,
+  },
+  description: {
+    type: String,
+    required: true,
+  },
+  doctor: {
+    type: String,
+    required: true,
+  },
+  date: {
+    type: Date,
+    required: true,
+  },
+  timeSlot: {
+    type: String,
+    required: true,
+  },
+  // Adding a reference to the user model
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: true
+  }
 });
 
-// Create a Mongoose model based on the schema, named 'Appoint'
 const Appoint = mongoose.model('Appoint', appointSchema);
 
-// Export the Appoint model to be used in other parts of the application
 module.exports = Appoint;
-
-

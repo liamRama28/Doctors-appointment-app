@@ -1,31 +1,40 @@
-//src/controllers/userController.js
-const User = require('../models/User'); // Import the User model
-const jwt = require('jsonwebtoken'); // Import JSON Web Token library
-const bcrypt = require('bcrypt'); // Import bcrypt library for password hashing
-const authMiddleware = require('../middleware/auth'); // Import the auth middleware
+// src/controllers/userController.js
+
+const User = require('../models/User'); // Make sure this points to your User model
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
 
 // Controller function for user registration
 exports.register = async (req, res) => {
   try {
     const { username, email, password } = req.body;
 
-    // Check if the email ends with '@gmail.com'
-    if (!email.endsWith('@gmail.com')) {
-      return res.status(403).json({ error: 'Email must end with @gmail.com' });
+    // Check for existing user
+    let user = await User.findOne({ email });
+    if (user) {
+      return res.status(400).json({ error: 'User already exists' });
     }
 
-    // Create a new User instance with the provided data
-    const user = new User({ username, email, password });
-    await user.save(); // Save the user to the database
+    // Create a new User instance
+    user = new User({ username, email, password });
 
-    // Generate a JSON Web Token (JWT) for authentication
-    const token = jwt.sign({ userId: user._id }, 'word', {
-      expiresIn: '7d', // Token expiration time (7 days)
-    });
+    // Hash password before saving to database
+    const salt = await bcrypt.genSalt(10);
+    user.password = await bcrypt.hash(password, salt);
 
-    res.json({ token }); // Return the JWT as a response
+    await user.save();
+
+    // Create and send the JWT token
+    const token = jwt.sign(
+      { userId: user._id, isAdmin: email === 'admin@gmail.com' }, 
+      'black', // Replace with your actual secret key
+      { expiresIn: '1h' }
+    );
+
+    res.json({ token });
   } catch (error) {
-    res.status(500).json({ error: 'Registration failed' });
+    console.error('Error in registration:', error.message);
+    res.status(500).send('Server error');
   }
 };
 
@@ -36,28 +45,29 @@ exports.login = async (req, res) => {
 
     // Find a user in the database with the provided email
     const user = await User.findOne({ email });
-
     if (!user) {
-      return res.status(401).json({ error: 'Authentication failed' });
+      return res.status(401).json({ error: 'Invalid credentials' });
     }
 
-    // Compare the provided password with the hashed password stored in the database
+    // Compare the provided password with the stored hash
     const isMatch = await bcrypt.compare(password, user.password);
-
     if (!isMatch) {
-      return res.status(401).json({ error: 'Wrong password' });
+      return res.status(401).json({ error: 'Invalid credentials' });
     }
 
-    // Generate a JSON Web Token (JWT) for authentication
-    const token = jwt.sign({ userId: user._id }, 'word', {
-      expiresIn: '7d',
-    });
+    // Check if the user is an admin
+    const isAdmin = email === 'admin@gmail.com';
 
-    res.json({ token }); // Return the JWT as a response
+    // Generate a JWT token
+    const token = jwt.sign(
+      { userId: user._id, isAdmin: email === 'admin@gmail.com' },
+      'black', // Replace with your actual secret key
+      { expiresIn: '1h' }
+    );
+
+    res.json({ token, userId: user._id, isAdmin: isAdmin });
   } catch (error) {
-    res.status(500).json({ error: 'Login failed' });
+    console.error('Error in login:', error.message);
+    res.status(500).json({ error: 'Server error' });
   }
 };
-
-
-

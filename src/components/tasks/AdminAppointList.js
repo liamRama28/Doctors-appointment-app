@@ -1,24 +1,35 @@
-//AdminAppointmentList.js
+// AdminAppointList.js
+
 import React, { useEffect, useState } from 'react';
-import axios from '../../api'; // Import Axios with your configured base URL
-import { Link, useNavigate } from 'react-router-dom';  // <-- Add this line
-import './AdminAppointList.css'; // Import the CSS file for styling
+import axios from '../../api.mjs'; // Ensure this is correctly configured
+import { Link, useNavigate } from 'react-router-dom';
+import './AdminAppointList.css'; // Your CSS file for styling
 
-const AppointList = () => {
-  // State variables
-  const [appoints, setAppoints] = useState([]); // To store appointments
-  const [editedAppoint, setEditedAppoint] = useState(null); // To track edited appointment
-  const [editedTitle, setEditedTitle] = useState(''); // To edit appointment title
-  const [editedDescription, setEditedDescription] = useState(''); // To edit appointment description
-  const [characterLimitExceeded, setCharacterLimitExceeded] = useState(false); // To track character limit exceeded
-  const [acceptedAppoints, setAcceptedAppoints] = useState(new Set()); // To track accepted appointments
+const AdminAppointList = () => {
+  const [appoints, setAppoints] = useState([]);
+  const [editedAppoint, setEditedAppoint] = useState(null);
+  const [editedTitle, setEditedTitle] = useState('');
+  const [editedDescription, setEditedDescription] = useState('');
+  const [characterLimitExceeded, setCharacterLimitExceeded] = useState(false);
+  const [acceptedAppoints, setAcceptedAppoints] = useState(new Set());
 
-  // Fetch appointments from the server on component mount
+  const navigate = useNavigate();
+
   useEffect(() => {
     const fetchAppoints = async () => {
       try {
-        const response = await axios.get('/api/tasks/list');
-    
+        const authToken = localStorage.getItem('auth-token');
+        if (!authToken) {
+          console.error('No authentication token found');
+          navigate('/login'); // Redirect to login if no token
+          return;
+        }
+
+        const response = await axios.get('/api/tasks/list', {
+          headers: {
+            'auth-token': authToken
+          }
+        });
         setAppoints(response.data);
       } catch (err) {
         console.error('Error fetching Appointments:', err.message);
@@ -26,26 +37,27 @@ const AppointList = () => {
     };
 
     fetchAppoints();
-  }, []);
+  }, [navigate]);
 
-  // Handle the deletion of an appointment
   const handleDelete = async (appointId) => {
     try {
-      await axios.delete(`/api/tasks/delete/${appointId}`);
-      setAppoints((prevAppoints) => prevAppoints.filter((appoint) => appoint._id !== appointId));
+      await axios.delete(`/api/tasks/delete/${appointId}`, {
+        headers: {
+          'auth-token': localStorage.getItem('auth-token')
+        }
+      });
+      setAppoints(appoints.filter((appoint) => appoint._id !== appointId));
     } catch (err) {
       console.error('Error deleting appointment:', err.message);
     }
   };
 
-  // Handle the editing of an appointment
   const handleEdit = (appoint) => {
     setEditedAppoint(appoint);
     setEditedTitle(appoint.title);
     setEditedDescription(appoint.description);
   };
 
-  // Handle saving the edited appointment
   const handleSaveEdit = async () => {
     if (editedDescription.length > 140) {
       setCharacterLimitExceeded(true);
@@ -58,13 +70,15 @@ const AppointList = () => {
       const response = await axios.put(`/api/tasks/edit/${editedAppoint._id}`, {
         title: editedTitle,
         description: editedDescription,
+      }, {
+        headers: {
+          'auth-token': localStorage.getItem('auth-token')
+        }
       });
 
-      setAppoints((prevAppoints) =>
-        prevAppoints.map((appoint) => (appoint._id === editedAppoint._id ? response.data : appoint))
-      );
+      setAppoints(appoints.map((appoint) => 
+        appoint._id === editedAppoint._id ? response.data : appoint));
 
-      // Clear the edited appointment state
       setEditedAppoint(null);
       setEditedTitle('');
       setEditedDescription('');
@@ -73,7 +87,6 @@ const AppointList = () => {
     }
   };
 
-  // Handle accepting or unaccepting an appointment
   const handleAccept = (appointId) => {
     setAcceptedAppoints((prevAcceptedAppoints) => {
       const updatedAcceptedAppoints = new Set(prevAcceptedAppoints);
@@ -86,10 +99,7 @@ const AppointList = () => {
     });
   };
 
-  // Check if an appointment is accepted
   const isAppointAccepted = (appointId) => acceptedAppoints.has(appointId);
-
-  const navigate = useNavigate(); // Add this line to get the navigate function
 
   return (
     <div>
@@ -123,25 +133,22 @@ const AppointList = () => {
                 <div>{appoint.doctor}</div>
                 <div>{appoint.date}</div>
                 <div>{appoint.timeSlot}</div>
+                <button onClick={() => handleEdit(appoint)}>Edit</button>
+                <button onClick={() => handleDelete(appoint._id)}>Delete</button>
+                <button
+                  onClick={() => handleAccept(appoint._id)}
+                  className={isAppointAccepted(appoint._id) ? 'unaccept-button' : 'accept-button'}>
+                  {isAppointAccepted(appoint._id) ? 'Unaccept' : 'Accept'}
+                </button>
               </div>
             )}
-            <button onClick={() => handleEdit(appoint)}>Edit</button>
-            <button onClick={() => handleDelete(appoint._id)}>Delete</button>
-            <button
-              onClick={() => handleAccept(appoint._id)}
-              className={isAppointAccepted(appoint._id) ? 'unaccept-button' : 'accept-button'}
-            >
-              {isAppointAccepted(appoint._id) ? 'Unaccept' : 'Accept'}
-            </button>
           </li>
         ))}
       </ul>
-
-      <div>
+      <Link to="/tasks">Back to Appointment List</Link>
       <button onClick={() => navigate('/login')}>Log Out</button>
-      </div>
     </div>
   );
 };
 
-export default AppointList;
+export default AdminAppointList;

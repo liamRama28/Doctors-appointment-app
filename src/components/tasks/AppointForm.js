@@ -1,12 +1,10 @@
-//AppointForm.js
+// AppointForm.js
 
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import axios from '../../api';
-import './AppointForm.css';
+import axios from '../../api.mjs'; // Ensure this points to your configured Axios instance
+import { useNavigate } from 'react-router-dom';
 
 const AppointForm = () => {
-  // State variables
   const [appoint, setAppoint] = useState({
     title: '',
     description: '',
@@ -18,40 +16,48 @@ const AppointForm = () => {
   const [successMessage, setSuccessMessage] = useState('');
 
   const { title, description, doctor, date, timeSlot } = appoint;
+  const navigate = useNavigate();
 
   // Handle changes in the form inputs
   const handleChange = (e) => {
     setAppoint({ ...appoint, [e.target.name]: e.target.value });
   };
 
- // Handle form submission
- const handleSubmit = async (e) => {
-  e.preventDefault();
-  try {
-    // Check if the total character count of title and description exceeds 140
-    if (appoint.title.length + appoint.description.length > 140) {
-      setError('Text cannot exceed 140 characters');
+  // Handle form submission
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError(''); // Clear previous errors
+    setSuccessMessage('');
+
+    // Retrieve the authentication token from local storage
+    const authToken = localStorage.getItem('auth-token');
+    if (!authToken) {
+      setError('Authentication error: No token provided');
       return;
     }
 
-    // Make a POST request to create a new appointment
-    const response = await axios.post('/api/tasks/create', appoint);
+    try {
+      // Check if the total character count of title and description exceeds 140
+      if (title.length + description.length > 140) {
+        setError('Text cannot exceed 140 characters');
+        return;
+      }
 
-    console.log('Appointment created:', response.data);
- // Check for success message in the response
- if (response.data && response.data.message) {
-  setSuccessMessage(response.data.message);
-}
-    // Clear form fields
-    setAppoint({ title: '', description: '', doctor: '', date: '', timeSlot: '' });
-  } catch (err) {
-    console.error('Error creating appointment:', err.message);
-  }
-};
+      // Make a POST request to create a new appointment, including the auth token in headers
+      const response = await axios.post('/api/tasks/create', appoint, {
+        headers: {
+          'auth-token': authToken
+        }
+      });
 
-
-  
-  
+      // Handle successful response
+      setSuccessMessage('Appointment created successfully!');
+      setAppoint({ title: '', description: '', doctor: '', date: '', timeSlot: '' }); // Clear the form
+      navigate('/tasks'); // Redirect to appointments list or dashboard as needed
+    } catch (err) {
+      setError(err.response ? err.response.data.error : 'An error occurred. Please try again later.');
+    }
+  };
 
   return (
     <div>
@@ -60,7 +66,7 @@ const AppointForm = () => {
         <div>
           <input
             type="text"
-            placeholder="Title"
+            placeholder="Full Name"
             name="title"
             value={title}
             onChange={handleChange}
@@ -69,7 +75,7 @@ const AppointForm = () => {
         </div>
         <div>
           <textarea
-            placeholder="Description"
+            placeholder="Reason for booking"
             name="description"
             value={description}
             onChange={handleChange}
@@ -87,7 +93,6 @@ const AppointForm = () => {
         <div>
           <input
             type="date"
-            placeholder="Date"
             name="date"
             value={date}
             onChange={handleChange}
@@ -110,11 +115,9 @@ const AppointForm = () => {
         </div>
         <button type="submit">Create Appointment</button>
       </form>
-      {error && <div className="error-message">{error}</div>}
-      {successMessage && <div className="success-message">{successMessage}</div>}
-      <Link to="/tasks" className="back-button">
-        Back to Appointment List
-      </Link>
+      {error && <div style={{ color: 'red' }}>{error}</div>}
+      {successMessage && <div style={{ color: 'green' }}>{successMessage}</div>}
+      
     </div>
   );
 };

@@ -1,6 +1,6 @@
 // Register.js
 import React, { useState } from 'react';
-import axios from '../../api'; // Import Axios with your configured base URL
+import axios from '../../api.mjs'; // Import Axios with your configured base URL
 import { Link, useNavigate } from 'react-router-dom'; // Updated import
 
 const Register = () => {

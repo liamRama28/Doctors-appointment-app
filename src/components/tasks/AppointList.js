@@ -14,13 +14,17 @@ const AppointList = () => {
   useEffect(() => {
     const fetchAppoints = async () => {
       try {
-        const response = await axios.get('/api/tasks/list');
+        const response = await axios.get('/api/tasks/list', {
+          headers: {
+            'auth-token': localStorage.getItem('auth-token') // send the auth token in request headers
+          }
+        });
         setAppoints(response.data);
       } catch (err) {
         console.error('Error fetching appointments:', err.message);
       }
     };
-
+  
     fetchAppoints();
   }, []);
 

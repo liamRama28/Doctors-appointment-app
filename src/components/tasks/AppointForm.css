@@ -45,3 +45,9 @@ p {
   color: #00ff00; /* Set success message color to green */
 }
 
+/* Style for input and textarea when they are focused */
+input:focus, textarea:focus {
+  background-color: white;
+  color: black;
+  outline: none; /* Optional: removes the default focus outline */
+}
